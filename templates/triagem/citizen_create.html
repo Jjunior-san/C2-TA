@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Cadastro de cidadão{% endblock %}
+
+{% block content %}
+<section class="card">
+    <span class="eyebrow">Cadastro</span>
+    <h1>Novo cidadão</h1>
+    <p>Cadastre o cidadão para agilizar emissão de senha, histórico e integração futura com o ERP.</p>
+
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="actions">
+            <button class="btn btn-primary" type="submit">Salvar cidadão</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
