@@ -6,6 +6,7 @@ app_name = 'triagem'
 
 urlpatterns = [
     path('', operations_views.panel, name='home-panel'),
-    path('operacional/', include('triagem.operations_urls')),
+    path('', include('triagem.operations_urls')),
+    path('', include('triagem.call_urls')),
     path('painel/', operations_views.panel, name='panel'),
 ]
