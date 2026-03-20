@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Emissão de senha{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Recepção</span>
+        <h1>Emitir senha</h1>
+        <p>Emita senhas para atendimento presencial com vínculo opcional ao cidadão cadastrado.</p>
+
+        <form method="post" class="form-grid">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="actions">
+                <button class="btn btn-primary" type="submit">Emitir senha</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="hero-card">
+        <div class="metric-label">Última emissão</div>
+        {% if issued_ticket %}
+            <div class="metric-value">{{ issued_ticket.ticket_number }}</div>
+            <ul>
+                <li>Unidade: {{ issued_ticket.unit.name }}</li>
+                <li>Serviço: {{ issued_ticket.service.name }}</li>
+                <li>Status: {{ issued_ticket.get_status_display }}</li>
+            </ul>
+        {% else %}
+            <div class="metric-value">Nenhuma senha emitida nesta sessão</div>
+            <ul>
+                <li>Informe a unidade</li>
+                <li>Informe o serviço</li>
+                <li>Selecione ou digite o cidadão</li>
+            </ul>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
