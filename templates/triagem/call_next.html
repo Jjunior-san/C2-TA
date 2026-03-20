@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Chamar próxima senha{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Guichê</span>
+        <h1>Chamar próxima senha</h1>
+        <p>Fluxo mínimo de operação para chamar a próxima senha aguardando na fila.</p>
+
+        <form method="post" class="actions">
+            {% csrf_token %}
+            <button class="btn btn-primary" type="submit">Chamar próxima senha</button>
+            <a class="btn btn-secondary" href="/painel/">Ver painel</a>
+        </form>
+    </div>
+
+    <div class="hero-card">
+        <div class="metric-label">Última chamada</div>
+        {% if called_ticket %}
+            <div class="metric-value">{{ called_ticket.ticket_number }}</div>
+            <ul>
+                <li>Serviço: {{ called_ticket.service.name }}</li>
+                <li>Unidade: {{ called_ticket.unit.name }}</li>
+                <li>Status: {{ called_ticket.get_status_display }}</li>
+            </ul>
+        {% else %}
+            <div class="metric-value">Nenhuma chamada nesta ação</div>
+            <p>Use o botão para chamar a próxima senha disponível.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="grid">
+    <article class="card">
+        <h2>Aguardando</h2>
+        {% if waiting %}
+            <ul>
+                {% for item in waiting %}
+                    <li><strong>{{ item.ticket_number }}</strong> — {{ item.service.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhuma senha aguardando.</p>
+        {% endif %}
+    </article>
+
+    <article class="card">
+        <h2>Chamadas recentes</h2>
+        {% if called %}
+            <ul>
+                {% for item in called %}
+                    <li><strong>{{ item.ticket_number }}</strong> — {{ item.service.name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhuma chamada recente.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}
