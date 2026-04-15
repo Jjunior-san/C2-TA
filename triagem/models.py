@@ -79,6 +79,7 @@ class QueueTicket(TimestampedModel):
     service = models.ForeignKey(ServiceCatalog, on_delete=models.PROTECT, related_name='tickets')
     citizen = models.ForeignKey(CitizenRecord, on_delete=models.SET_NULL, null=True, blank=True, related_name='tickets')
     ticket_number = models.CharField(max_length=20, db_index=True)
+    issued_on = models.DateField(default=timezone.localdate, db_index=True)
     daily_sequence = models.PositiveIntegerField()
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.ISSUED)
     issued_at = models.DateTimeField(default=timezone.now)
@@ -90,10 +91,30 @@ class QueueTicket(TimestampedModel):
 
     class Meta:
         ordering = ['-issued_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['unit', 'issued_on', 'daily_sequence'],
+                name='uq_queue_ticket_unit_day_sequence',
+            ),
+            models.UniqueConstraint(
+                fields=['unit', 'issued_on', 'ticket_number'],
+                name='uq_queue_ticket_unit_day_number',
+            ),
+        ]
         indexes = [
-            models.Index(fields=['unit', 'status', 'issued_at']),
+            models.Index(fields=['unit', 'status', 'issued_on', 'issued_at']),
             models.Index(fields=['ticket_number']),
         ]
 
     def __str__(self):
         return self.ticket_number
+
+
+from .citizen_profile import CitizenProfileExtension  # noqa: E402,F401
+from .integration_models import (  # noqa: E402,F401
+    ERPDepartmentMirror,
+    ERPOperatorMirror,
+    ERPSecretariatMirror,
+    IntegrationEventLog,
+    OutboundSyncQueue,
+)

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 
 import dj_database_url
 from dotenv import load_dotenv
@@ -7,8 +8,25 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
+
+def env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return str(value).strip().lower() in {'1', 'true', 'yes', 'on'}
+
+
+def env_int(name, default=0):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return int(value)
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'dev-only-change-me')
-DEBUG = os.environ.get('DJANGO_DEBUG', '1') == '1'
+DEBUG = env_bool('DJANGO_DEBUG', True)
+
+if not DEBUG and SECRET_KEY == 'dev-only-change-me':
+    raise ImproperlyConfigured('DJANGO_SECRET_KEY insegura para ambiente com DEBUG=0.')
 
 ALLOWED_HOSTS = [
     item.strip()
@@ -21,6 +39,18 @@ CSRF_TRUSTED_ORIGINS = [
     for item in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'http://127.0.0.1:8000,http://localhost:8000').split(',')
     if item.strip()
 ]
+
+SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', False)
+SESSION_COOKIE_SECURE = env_bool('DJANGO_SESSION_COOKIE_SECURE', False)
+CSRF_COOKIE_SECURE = env_bool('DJANGO_CSRF_COOKIE_SECURE', False)
+SESSION_COOKIE_SAMESITE = os.environ.get('DJANGO_SESSION_COOKIE_SAMESITE', 'Lax')
+CSRF_COOKIE_SAMESITE = os.environ.get('DJANGO_CSRF_COOKIE_SAMESITE', 'Lax')
+SECURE_HSTS_SECONDS = env_int('DJANGO_SECURE_HSTS_SECONDS', 0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', False)
+SECURE_HSTS_PRELOAD = env_bool('DJANGO_SECURE_HSTS_PRELOAD', False)
+
+if env_bool('DJANGO_USE_X_FORWARDED_PROTO', False):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,7 +103,7 @@ if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.parse(
         os.environ['DATABASE_URL'],
         conn_max_age=600,
-        ssl_require=os.environ.get('DATABASE_SSL_REQUIRED', '0') == '1',
+        ssl_require=env_bool('DATABASE_SSL_REQUIRED', False),
     )
 
 AUTH_PASSWORD_VALIDATORS = [
