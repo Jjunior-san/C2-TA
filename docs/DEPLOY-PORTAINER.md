@@ -24,6 +24,7 @@ O C2-TA sobe em stack separada do ERP, com:
 3. Definir domínio público do C2-TA
 4. Definir token de integração com o ERP
 5. Fazer deploy
+6. Em atualizações de layout/estáticos, forçar recriação do serviço web/proxy para garantir novo `collectstatic` e novo manifest de assets
 
 ## Quando usar este arquivo
 

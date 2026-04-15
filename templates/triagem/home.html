@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}C2-TA | Login{% endblock %}
 
@@ -17,7 +18,7 @@
             {% else %}
                 <img
                     class="welcome-logo-image"
-                    src="/static/images/c2-logo-principal.png"
+                    src="{% static 'images/c2-logo-principal.png' %}"
                     alt="C² Sistemas"
                 >
             {% endif %}
@@ -41,8 +42,10 @@
     <footer class="welcome-footer" aria-label="Rodapé institucional">
         <img
             class="welcome-footer-logo"
-            src="/static/images/c2-logo-icon.png"
+            src="{% static 'images/c2-logo-icon.png' %}"
             alt="C² Sistemas"
+            width="104"
+            height="104"
         >
         <p>© 2026 C² Sistemas</p>
     </footer>

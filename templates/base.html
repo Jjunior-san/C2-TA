@@ -1,17 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}C2-TA{% endblock %}</title>
-    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
     {% block chrome %}
     <header class="portal-header">
         <div class="container portal-header-inner">
             <a class="portal-vendor" href="/painel/">
-                <img class="portal-vendor-logo" src="/static/images/c2-logo-icon.png" alt="C² Sistemas">
+                <img class="portal-vendor-logo" src="{% static 'images/c2-logo-icon.png' %}" alt="C² Sistemas" width="44" height="44">
                 <div class="portal-vendor-copy">
                     <span class="portal-vendor-name">C² Sistemas</span>
                     <span class="portal-vendor-unit">{{ app_branding.organization_name }}</span>
@@ -22,7 +23,7 @@
                 {% if app_branding.organization_logo_url %}
                     <img class="portal-client-logo" src="{{ app_branding.organization_logo_url }}" alt="{{ app_branding.organization_logo_alt }}">
                 {% else %}
-                    <img class="portal-client-logo" src="/static/images/c2-logo-principal.png" alt="C² Sistemas">
+                    <img class="portal-client-logo" src="{% static 'images/c2-logo-principal.png' %}" alt="C² Sistemas">
                 {% endif %}
             </div>
 
@@ -52,7 +53,7 @@
     </main>
 
     <footer class="container portal-footer" aria-label="Rodapé da aplicação">
-        <img class="portal-footer-logo" src="/static/images/c2-logo-icon.png" alt="C² Sistemas">
+        <img class="portal-footer-logo" src="{% static 'images/c2-logo-icon.png' %}" alt="C² Sistemas" width="104" height="104">
         <span>C2-TA</span>
     </footer>
     {% endblock %}
