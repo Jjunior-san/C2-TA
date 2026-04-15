@@ -25,6 +25,14 @@ O C2-TA sobe em stack separada do ERP, com:
 4. Definir token de integração com o ERP
 5. Fazer deploy
 
+## Quando usar este arquivo
+
+Use `stack.portainer.yml` quando o Portainer estiver fazendo build local da aplicação e do proxy.
+
+Se o deploy for em **Git repository**, prefira `stack.portainer.git.yml`.
+
+Motivo: em modo Git, bind mounts de arquivos do repositório podem falhar no `proxy` dependendo de onde o engine resolve o caminho do checkout.
+
 ## Variáveis críticas
 
 - `POSTGRES_PASSWORD`

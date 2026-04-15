@@ -33,6 +33,10 @@ Em **Stacks > Add stack > Git repository**:
 - Reference: `main`
 - Compose path: `stack.portainer.git.yml`
 
+Nao use `stack.portainer.yml` nesse modo.
+
+Esse arquivo e voltado para build local e historicamente pode falhar no `proxy` quando o Portainer tenta resolver bind mounts de arquivos do checkout Git.
+
 ## Passo 3 — variáveis críticas
 
 Definir no Portainer:

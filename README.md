@@ -33,3 +33,8 @@ O projeto deverá operar com base unificada e integração com o ecossistema C2,
 3. Implementar emissão de senha
 4. Implementar painel de chamadas
 5. Implementar relatórios operacionais
+
+## Deploy no Portainer
+
+- Para stack com build local no host/engine: `stack.portainer.yml`
+- Para stack criada pelo modo **Git repository** do Portainer: `stack.portainer.git.yml`
