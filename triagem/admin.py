@@ -8,7 +8,7 @@ from .integration_models import (
     IntegrationEventLog,
     OutboundSyncQueue,
 )
-from .models import AttendanceUnit, CitizenRecord, QueueTicket, ServiceCatalog
+from .models import Appointment, AttendanceUnit, CitizenRecord, PriorityProfile, QueueTicket, ServiceCatalog
 
 
 @admin.register(AttendanceUnit)
@@ -37,6 +37,20 @@ class QueueTicketAdmin(admin.ModelAdmin):
     list_display = ('ticket_number', 'unit', 'service', 'citizen', 'status', 'issued_at')
     list_filter = ('unit', 'service', 'status')
     search_fields = ('ticket_number', 'citizen__full_name', 'citizen__tax_id')
+
+
+@admin.register(PriorityProfile)
+class PriorityProfileAdmin(admin.ModelAdmin):
+    list_display = ('name', 'code', 'sort_order', 'target_wait_minutes', 'is_preferential', 'is_active')
+    list_filter = ('is_preferential', 'is_active')
+    search_fields = ('name', 'code', 'description')
+
+
+@admin.register(Appointment)
+class AppointmentAdmin(admin.ModelAdmin):
+    list_display = ('citizen_name', 'unit', 'service', 'priority_profile', 'scheduled_for', 'status')
+    list_filter = ('unit', 'service', 'status', 'priority_profile')
+    search_fields = ('citizen_name', 'citizen__full_name', 'contact_phone', 'notes')
 
 
 @admin.register(CitizenProfileExtension)

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Agendamento{% endblock %}
+
+{% block content %}
+<section class="card-lite module-page">
+    <span class="eyebrow">Operação</span>
+    <h1>Agendamento</h1>
+    <p>Cadastre horários de atendimento, retornos e encaixes operacionais para os próximos atendimentos.</p>
+
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.citizen.id_for_label }}">Cidadão cadastrado</label>
+                {{ form.citizen }}
+                {{ form.citizen.errors }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.citizen_name.id_for_label }}">Nome do cidadão</label>
+                {{ form.citizen_name }}
+                {% if form.citizen_name.errors %}<ul class="field-errors">{% for error in form.citizen_name.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                <span class="field-help">Use este campo para encaixes rápidos sem cadastro prévio.</span>
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.unit.id_for_label }}">Unidade</label>
+                {{ form.unit }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.service.id_for_label }}">Serviço</label>
+                {{ form.service }}
+                {% if form.service.errors %}<ul class="field-errors">{% for error in form.service.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.priority_profile.id_for_label }}">Prioridade</label>
+                {{ form.priority_profile }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.scheduled_for.id_for_label }}">Data e hora</label>
+                {{ form.scheduled_for }}
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.contact_phone.id_for_label }}">Telefone</label>
+                {{ form.contact_phone }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.notes.id_for_label }}">Observações</label>
+                {{ form.notes }}
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" type="submit">Salvar agendamento</button>
+        </div>
+    </form>
+</section>
+
+<section class="card-lite">
+    <h2>Próximos agendamentos</h2>
+
+    {% if upcoming_appointments %}
+        <div class="record-list">
+            {% for item in upcoming_appointments %}
+                <article class="record-item">
+                    <div class="record-item-main">
+                        <strong>{{ item.citizen_name }}</strong>
+                        <span>{{ item.service.name }} · {{ item.unit.name }}</span>
+                        {% if item.contact_phone %}<span>Contato: {{ item.contact_phone }}</span>{% endif %}
+                    </div>
+                    <div class="record-item-meta">
+                        <span>{{ item.scheduled_for|date:"d/m/Y H:i" }}</span>
+                        <span>{{ item.get_status_display }}</span>
+                        {% if item.priority_profile %}<span class="priority-chip">{{ item.priority_profile.name }}</span>{% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhum agendamento registrado ainda.</p>
+    {% endif %}
+</section>
+{% endblock %}

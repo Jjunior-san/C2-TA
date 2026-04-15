@@ -65,6 +65,56 @@ class CitizenRecord(TimestampedModel, ActiveModel):
         return self.full_name
 
 
+class PriorityProfile(TimestampedModel, ActiveModel):
+    name = models.CharField(max_length=120)
+    code = models.CharField(max_length=30, unique=True)
+    description = models.TextField(blank=True)
+    color = models.CharField(max_length=20, default='#9f1239')
+    sort_order = models.PositiveIntegerField(default=0)
+    target_wait_minutes = models.PositiveIntegerField(default=15)
+    is_preferential = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['sort_order', 'name']
+
+    def __str__(self):
+        return self.name
+
+
+class Appointment(TimestampedModel):
+    class Status(models.TextChoices):
+        SCHEDULED = 'scheduled', 'Agendado'
+        CONFIRMED = 'confirmed', 'Confirmado'
+        CHECKED_IN = 'checked_in', 'Recepcionado'
+        COMPLETED = 'completed', 'Concluído'
+        CANCELLED = 'cancelled', 'Cancelado'
+
+    unit = models.ForeignKey(AttendanceUnit, on_delete=models.PROTECT, related_name='appointments')
+    service = models.ForeignKey(ServiceCatalog, on_delete=models.PROTECT, related_name='appointments')
+    citizen = models.ForeignKey(CitizenRecord, on_delete=models.SET_NULL, null=True, blank=True, related_name='appointments')
+    priority_profile = models.ForeignKey(
+        PriorityProfile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='appointments',
+    )
+    citizen_name = models.CharField(max_length=180, blank=True)
+    contact_phone = models.CharField(max_length=30, blank=True)
+    scheduled_for = models.DateTimeField(db_index=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.SCHEDULED)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['scheduled_for', 'created_at']
+        indexes = [
+            models.Index(fields=['unit', 'status', 'scheduled_for']),
+        ]
+
+    def __str__(self):
+        return self.citizen_name or (self.citizen.full_name if self.citizen else f'Agendamento {self.pk}')
+
+
 class QueueTicket(TimestampedModel):
     class Status(models.TextChoices):
         ISSUED = 'issued', 'Emitida'

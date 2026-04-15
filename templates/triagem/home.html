@@ -1,49 +1,50 @@
 {% extends 'base.html' %}
 
-{% block title %}C2-TA | Início{% endblock %}
+{% block title %}C2-TA | Login{% endblock %}
 
-{% block content %}
-<section class="hero">
-    <div class="hero-copy">
-        <span class="eyebrow">Sistema C2</span>
-        <h1>Triagem, senha, fila e atendimento em um só lugar</h1>
-        <p>
-            Base inicial do C2-TA preparada para emissão de senha, triagem,
-            chamada em painel, atendimento por guichê e encaminhamento interno.
-        </p>
-        <div class="actions">
-            <a class="btn btn-primary" href="/admin/">Abrir administração</a>
-            <a class="btn btn-secondary" href="#modulos">Ver módulos</a>
+{% block body_class %}home-screen{% endblock %}
+
+{% block chrome %}
+<main class="welcome-shell">
+    <section class="welcome-card" aria-label="Login C2-TA">
+        <div class="welcome-logo-frame">
+            {% if app_branding.organization_logo_url %}
+                <img
+                    class="welcome-logo-image"
+                    src="{{ app_branding.organization_logo_url }}"
+                    alt="{{ app_branding.organization_logo_alt }}"
+                >
+            {% else %}
+                <img
+                    class="welcome-logo-image"
+                    src="/static/images/c2-logo-principal.png"
+                    alt="C² Sistemas"
+                >
+            {% endif %}
         </div>
-    </div>
-    <div class="hero-card">
-        <div class="metric-label">Estado atual</div>
-        <div class="metric-value">MVP em estruturação</div>
-        <ul>
-            <li>Base Django pronta</li>
-            <li>PostgreSQL configurável</li>
-            <li>Modelos iniciais cadastrados</li>
-            <li>Admin liberado para operação</li>
-        </ul>
-    </div>
-</section>
 
-<section id="modulos" class="grid">
-    <article class="card">
-        <h2>Recepção</h2>
-        <p>Cadastro do cidadão, emissão de senha e direcionamento inicial.</p>
-    </article>
-    <article class="card">
-        <h2>Triagem</h2>
-        <p>Classificação do atendimento, prioridade e definição de fluxo.</p>
-    </article>
-    <article class="card">
-        <h2>Painel</h2>
-        <p>Chamada pública de senhas e visualização de fila.</p>
-    </article>
-    <article class="card">
-        <h2>Atendimento</h2>
-        <p>Operação de guichê com registro de início, fim e encaminhamentos.</p>
-    </article>
-</section>
+        <form method="post" class="login-form" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next_url }}">
+
+            {% if form.non_field_errors %}
+                <p class="login-error">Usuário ou senha inválidos.</p>
+            {% endif %}
+
+            <div class="login-field">{{ form.username }}</div>
+            <div class="login-field">{{ form.password }}</div>
+
+            <button class="welcome-enter" type="submit">Entrar</button>
+        </form>
+    </section>
+
+    <footer class="welcome-footer" aria-label="Rodapé institucional">
+        <img
+            class="welcome-footer-logo"
+            src="/static/images/c2-logo-icon.png"
+            alt="C² Sistemas"
+        >
+        <p>© 2026 C² Sistemas</p>
+    </footer>
+</main>
 {% endblock %}

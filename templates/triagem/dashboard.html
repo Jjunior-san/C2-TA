@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Painel{% endblock %}
+
+{% block content %}
+<section class="dashboard-welcome card-lite">
+    <h1>Bem-vindo, {{ display_name }}</h1>
+</section>
+
+<section class="menu-section">
+    <div class="menu-grid">
+        {% for item in main_modules %}
+            <a class="menu-card" href="{{ item.url }}">
+                <span class="menu-card-badge">{{ item.badge }}</span>
+                <span class="menu-card-title">{{ item.label }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="menu-section">
+    <h2 class="menu-section-title">Administração</h2>
+    <div class="menu-grid menu-grid-admin">
+        {% for item in admin_modules %}
+            <a class="menu-card" href="{{ item.url }}">
+                <span class="menu-card-badge">{{ item.badge }}</span>
+                <span class="menu-card-title">{{ item.label }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

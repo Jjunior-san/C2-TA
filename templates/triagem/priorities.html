@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | Prioridades{% endblock %}
+
+{% block content %}
+<section class="card-lite module-page">
+    <span class="eyebrow">Administração</span>
+    <h1>Prioridades</h1>
+    <p>Configure níveis de prioridade usados em agendamento, recepção e futuras regras de atendimento preferencial.</p>
+
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.name.id_for_label }}">Nome</label>
+                {{ form.name }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.code.id_for_label }}">Código</label>
+                {{ form.code }}
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.color.id_for_label }}">Cor</label>
+                {{ form.color }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.sort_order.id_for_label }}">Ordem</label>
+                {{ form.sort_order }}
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.target_wait_minutes.id_for_label }}">Meta de espera (min)</label>
+                {{ form.target_wait_minutes }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.is_preferential.id_for_label }}">Preferencial</label>
+                {{ form.is_preferential }}
+            </div>
+        </div>
+
+        <div class="form-row form-row-2">
+            <div class="field-group">
+                <label for="{{ form.is_active.id_for_label }}">Ativa</label>
+                {{ form.is_active }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.description.id_for_label }}">Descrição</label>
+                {{ form.description }}
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" type="submit">Salvar prioridade</button>
+        </div>
+    </form>
+</section>
+
+<section class="card-lite">
+    <h2>Perfis cadastrados</h2>
+
+    {% if priorities %}
+        <div class="record-list">
+            {% for item in priorities %}
+                <article class="record-item">
+                    <div class="record-item-main">
+                        <strong>{{ item.name }}</strong>
+                        <span>Código: {{ item.code }}</span>
+                        <span>{{ item.description|default:'Sem descrição informada.' }}</span>
+                    </div>
+                    <div class="record-item-meta">
+                        <span>Ordem {{ item.sort_order }}</span>
+                        <span>{{ item.target_wait_minutes }} min</span>
+                        <span class="priority-chip" style="background: {{ item.color }}22; color: {{ item.color }};">{% if item.is_preferential %}Preferencial{% else %}Padrão{% endif %}</span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Nenhuma prioridade cadastrada ainda.</p>
+    {% endif %}
+</section>
+{% endblock %}

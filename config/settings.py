@@ -40,6 +40,22 @@ CSRF_TRUSTED_ORIGINS = [
     if item.strip()
 ]
 
+C2TA_PRODUCT_NAME = os.environ.get('C2TA_PRODUCT_NAME', 'C2-TA')
+C2TA_PRODUCT_TAGLINE = os.environ.get(
+    'C2TA_PRODUCT_TAGLINE',
+    'Triagem, fila e painel em um fluxo unico.',
+)
+C2TA_ORGANIZATION_NAME = os.environ.get('C2TA_ORGANIZATION_NAME', 'C2 Sistemas')
+C2TA_ORGANIZATION_TAGLINE = os.environ.get(
+    'C2TA_ORGANIZATION_TAGLINE',
+    'Plataforma configuravel para empresas e prefeituras.',
+)
+C2TA_ORGANIZATION_LOGO_URL = os.environ.get('C2TA_ORGANIZATION_LOGO_URL', '').strip()
+C2TA_ORGANIZATION_LOGO_ALT = os.environ.get(
+    'C2TA_ORGANIZATION_LOGO_ALT',
+    C2TA_ORGANIZATION_NAME,
+)
+
 SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', False)
 SESSION_COOKIE_SECURE = env_bool('DJANGO_SESSION_COOKIE_SECURE', False)
 CSRF_COOKIE_SECURE = env_bool('DJANGO_CSRF_COOKIE_SECURE', False)
@@ -85,6 +101,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'triagem.context_processors.app_branding',
             ],
         },
     },
@@ -135,3 +152,5 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
+
+WHITENOISE_MANIFEST_STRICT = False

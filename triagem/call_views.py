@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 from .call_service import CallService, CallServiceError
 from .models import QueueTicket
 
 
+@login_required(login_url='/')
 def call_next(request):
     called_ticket = None
     if request.method == 'POST':
@@ -27,6 +29,7 @@ def call_next(request):
     )
 
 
+@login_required(login_url='/')
 def recall_panel(request):
     called = QueueTicket.objects.filter(status=QueueTicket.Status.CALLED).order_by('-called_at')[:10]
     return render(request, 'triagem/recall_panel.html', {'called': called})

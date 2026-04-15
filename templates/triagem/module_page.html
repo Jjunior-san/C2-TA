@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}C2-TA | {{ title }}{% endblock %}
+
+{% block content %}
+<section class="card-lite module-page">
+    <span class="eyebrow">{{ eyebrow }}</span>
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+
+    {% if metrics %}
+        <div class="metric-grid">
+            {% for item in metrics %}
+                <article class="metric-card">
+                    <span class="metric-label">{{ item.label }}</span>
+                    <strong class="metric-strong">{{ item.value }}</strong>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
